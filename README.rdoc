@@ -15,3 +15,8 @@ Description goes here.
 == Copyright
 
 Copyright (c) 2009 Nick Zadrozny. See LICENSE for details.
+
+== Thanks
+
+* Digitaria Interactive - For sponsoring the development of the initial concept and prototype. http://www.digitaria.com/
+* Rob Kaufman - For suggesting "sous chef" for the name. Why is naming a project the hardest part?
