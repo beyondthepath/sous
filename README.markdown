@@ -11,6 +11,8 @@ In a config/cluster.rb file, you'll use a DSL to define your cluster, its enviro
     # as many environments and roles as it needs.
     
     cluster :app_name do
+      aws_access_key_id 'abc123'
+      aws_secret_access_key 'cba321'
     
       # (TODO) set up properties that all environments will inherit
       # for example, credentials and default instance sizes
@@ -48,6 +50,7 @@ In a config/cluster.rb file, you'll use a DSL to define your cluster, its enviro
   * **Provision** instances for roles that do not have any running
   * **Bootstrap** newly provisioned instances so they can run Chef
   * **Configure** instances by syncing Chef cookbooks and running chef-solo
+* Provisioning logic for all of the above, with Fog
 
 ## Note on Patches/Pull Requests
  
