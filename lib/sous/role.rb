@@ -13,7 +13,7 @@ module Sous
     end
     
     def instance(name)
-      # TODO - launch an instance?
+      # TODO - find and set attributes for a specific instance?
     end
 
     ###
@@ -23,6 +23,15 @@ module Sous
     def aws_access_key_id(aws_access_key_id=nil)
       self.attributes[:aws_access_key_id] = aws_access_key_id unless aws_access_key_id.nil?
       self.attributes[:aws_access_key_id]
+    end
+    
+    ###
+    # Cluster commands
+    ##
+    
+    def provision!
+      # 1. Check to see whether we need to provision, based on instances already running
+      # 2. Provision away as needed!
     end
 
   end

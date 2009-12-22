@@ -22,9 +22,7 @@ describe Environment do
       lambda{ @environment.role }.should raise_error
     end
     it "should return a role object" do
-      pending "not sure we really need this" do
-        @environment.role(:test).should be_a(Sous::Role)
-      end
+      @environment.role(:test).should be_a(Sous::Role)
     end
     it "should add a role to its roles" do
       @environment.role(:test)
@@ -36,4 +34,16 @@ describe Environment do
       @environment.roles.should == []
     end
   end
+
+  describe "provisioning" do
+    before(:each) do
+      @environment.role(:app)
+    end
+    it "should have its logic delegated down to the respective environments and roles" do
+      @environment.roles.each { |e| e.should_receive(:provision!) }
+      @environment.provision!
+    end
+  end
+
+
 end

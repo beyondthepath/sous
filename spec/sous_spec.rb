@@ -56,5 +56,19 @@ describe Sous do
       @cluster.roles.first.aws_access_key_id.should == 'test3'
     end
   end
+  
+  describe "provisioning" do
+    before(:each) do
+      @cluster = cluster :test do
+        environment :test do
+          role :app
+        end
+      end
+    end
+    it "should have its logic delegated down to the respective environments and roles" do
+      @cluster.environments.each { |e| e.should_receive(:provision!) }
+      @cluster.provision!
+    end
+  end
 
 end

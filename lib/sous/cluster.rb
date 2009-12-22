@@ -37,11 +37,11 @@ module Sous
     # Cluster commands
     ##
     
-    # def provision!
-    #   environments.each do |environment|
-    #     environment.provision!
-    #   end
-    # end
+    def provision!
+      environments.each do |environment|
+        environment.provision!
+      end
+    end
     
     # def bootstrap!
     #   environments.each do |environment|

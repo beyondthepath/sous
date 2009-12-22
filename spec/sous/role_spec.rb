@@ -21,15 +21,22 @@ describe Role do
     it "should require a name" do
       lambda{ @role.instance }.should raise_error
     end
-    it "should return an instance object" do
-      pending "not sure we really need this" do
-        @role.instance(:test).should be_a(Sous::Instance)
-      end
-    end
+    # it "should return an instance object" do
+    #   pending "not sure whether we really need this yet" do
+    #     @role.instance(:test).should be_a(Sous::Instance)
+    #   end
+    # end
   end
   describe "instances" do
     it "should default to an empty array" do
       @role.instances.should == []
     end
   end
+
+  describe "provisioning" do
+    it "should not break" do
+      @role.provision!
+    end
+  end
+
 end

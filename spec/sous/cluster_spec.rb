@@ -37,4 +37,15 @@ describe Cluster do
     end
     c.environments.should_not be_empty
   end
+  
+  describe "provisioning" do
+    before(:each) do
+      @cluster.environment(:test)
+    end
+    it "should have its logic delegated down to the respective environments and roles" do
+      @cluster.environments.each { |e| e.should_receive(:provision!) }
+      @cluster.provision!
+    end
+  end
+
 end

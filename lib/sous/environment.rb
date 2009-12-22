@@ -15,7 +15,9 @@ module Sous
     end
     
     def role(name, &block)
-      self.roles << Role.new(name, &block)
+      role = Role.new(name, &block)
+      self.roles << role
+      role
     end
 
     ###
@@ -25,6 +27,16 @@ module Sous
     def aws_access_key_id(aws_access_key_id=nil)
       self.attributes[:aws_access_key_id] = aws_access_key_id unless aws_access_key_id.nil?
       self.attributes[:aws_access_key_id]
+    end
+    
+    ###
+    # Cluster commands
+    ##
+    
+    def provision!
+      roles.each do |role|
+        role.provision!
+      end
     end
 
   end
