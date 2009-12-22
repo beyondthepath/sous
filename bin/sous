@@ -40,7 +40,6 @@ optparse = OptionParser.new do |opts|
   options[:verbosity] = 0
   opts.on('-v', '--verbose', 'Set the verbosity.') do
     options[:verbosity] = options[:verbosity] + 1
-    puts options[:verbosity]
   end
   
   # TODO: no-op support (just print out what *would* be done), implies verbosity of at least 1
@@ -74,4 +73,25 @@ COMMANDS
   end
 
 end
+
 optparse.parse!
+
+# TODO: require sous
+# TODO: require the cluster config
+# TODO: merge run-time options into cluster options
+# TODO: execute the command (below)
+
+case ARGV.first
+when "list"
+  puts "Listing the currently running instances..."
+  # @cluster.list!
+when "provision"
+  puts "Provisioning instances..."
+  # @cluster.provision!
+when "bootstrap"
+  puts "Bootstrapping instances..."
+  # @cluster.bootstrap!
+when "configure"
+  puts "Running configuration scripts..."
+  # @cluster.configure!
+end
