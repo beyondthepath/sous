@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = 'Usage: sous [options] command'
+
+  options[:config] = 'config/cluster.rb'
+  opts.on('-c', '--config FILE', 'Specify the cluster config file to be used.', 'Defaults to config/cluster.rb.') do |config|
+    options[:config] = config
+  end
+  
+  # TODO: support environment selection via comma-separated whitelist
+  options[:environments] = nil
+  opts.on('-e', '--environments ENVS', 'Environments to include.') do |envs|
+    options[:environments] = envs
+  end
+
+  # TODO: support environment exclusion via comma-separated blacklist
+  options[:not_environments] = nil
+  opts.on('--not-environments ENVS', 'Environments to exclude.') do |envs|
+    options[:not_environments] = envs
+  end
+
+  # TODO: support specific role selection via comma-separated whitelist
+  options[:roles] = nil
+  opts.on('-r', '--roles ROLES', 'Roles to include.') do |roles|
+    options[:roles] = roles
+  end
+  
+  # TODO: support specific role exclusion via comma-separated blacklist
+  options[:not_roles] = nil
+  opts.on('--not-roles ROLES', 'Roles to exclude.') do |roles|
+    options[:not_roles] = roles
+  end
+  
+  # TODO: verbosity
+  options[:verbosity] = 0
+  opts.on('-v', '--verbose', 'Set the verbosity.') do
+    options[:verbosity] = options[:verbosity] + 1
+    puts options[:verbosity]
+  end
+  
+  # TODO: no-op support (just print out what *would* be done), implies verbosity of at least 1
+  options[:noop] = false
+  opts.on('-n', '--noop', 'Only print out the actions that would be', 'taken, do not perform them.') do
+    options[:verbosity] = 1 if options[:verbosity] > 1
+    options[:noop] = true
+  end
+  
+  opts.on('-h', '--help', 'Print this help message.') do
+    puts opts
+    puts %(
+
+COMMANDS
+
+  list          Lists the currently-running instances for the specified
+                environments and roles.
+
+  provision     Provision, bootstrap and configure instances that are
+                not already running.
+
+  bootstrap     Re-run the bootstrap script on the specified environments
+                and roles.
+
+  configure     Re-run the configuration cookbooks on the specified
+                environments and roles.
+
+)
+    
+    exit
+  end
+
+end
+optparse.parse!
