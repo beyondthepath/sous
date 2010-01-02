@@ -5,12 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "sous"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Provision and prepare your chef-configured clusters.}
+    gem.description = %Q{Provision and prepare your chef-configured clusters.}
     gem.email = "nick@beyondthepath.com"
     gem.homepage = "http://github.com/beyondthepath/sous"
     gem.authors = ["Nick Zadrozny"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.bindir = "bin"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
