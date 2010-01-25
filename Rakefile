@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/beyondthepath/sous"
     gem.authors = ["Nick Zadrozny"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_dependency "fog", ">= 0.0.40"
     gem.bindir = "bin"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

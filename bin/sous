@@ -77,7 +77,7 @@ end
 optparse.parse!
 
 require 'sous'
-require options[:config]
+  require options[:config]
 
 # TODO: require sous
 # TODO: require the cluster config
@@ -86,15 +86,11 @@ require options[:config]
 
 case ARGV.first
 when "list"
-  puts "Listing the currently running instances..."
-  Sous.cluster.list!
+  @cluster.list!(options)
 when "provision"
-  puts "Provisioning instances..."
-  Sous.cluster.provision!
+  @cluster.provision!(options)
 when "bootstrap"
-  puts "Bootstrapping instances..."
-  # @cluster.bootstrap!
+  @cluster.bootstrap!(options)
 when "configure"
-  puts "Running configuration scripts..."
-  # @cluster.configure!
+  @cluster.configure!(options)
 end
