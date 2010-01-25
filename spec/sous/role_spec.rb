@@ -35,9 +35,6 @@ describe Role do
   end
 
   describe "servers" do
-    it "should default to an empty array" do
-      @role.servers.should == []
-    end
     it "should query for servers if authorization is provided on the role" do
       pending "TODO: add support for a separate, role-specific cloud provider"
     end
@@ -59,8 +56,9 @@ protected
     @mock_environment ||= mock(Environment,
       :cluster => mock_cluster,
       :name => "environment",
-      :servers => [],
-      :connection => mock_connection
+      :connection => mock_connection,
+      :servers => mock_servers,
+      :image_id => ""
     )
   end
   
@@ -79,7 +77,8 @@ protected
   
   def mock_servers
     @mock_servers ||= mock("servers",
-      :new => mock("new server")
+      :create => mock("new server"),
+      :length => 0
     )
   end
 

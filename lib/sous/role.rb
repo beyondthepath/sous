@@ -72,9 +72,12 @@ module Sous
       info "Checking to see if #{handle} has any running servers."
       if connection.servers.length <= 0 # TODO: compare against minimum specified for this role
         # 2. Verify that we have all the settings we need to start a new server
+        # letting fog throw an image_id error for now
+        
         # 3. Provision away as needed!
         info connection.servers.create(
-          :image_id => image_id
+          :image_id => image_id,
+          :groups => [ handle ]
         )
       end
     end
