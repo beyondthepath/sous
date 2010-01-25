@@ -54,6 +54,22 @@ module Sous
     def servers
       @servers ||= connection.servers
     end
+
+    # TODO: add support for Array, Hash, Proc, whatever
+    def aws_credentials(path)
+      case path
+      when String
+        require 'yaml'
+        credentials = YAML.parse_file(path)
+        aws_access_key_id(credentials['aws_access_key_id'].value)
+        aws_secret_access_key(credentials['aws_secret_access_key'].value)
+      end
+    end
+    
+    def image_id(image_id=nil)
+      attributes[:image_id] = image_id if image_id
+      attributes[:image_id]
+    end
     
     ###
     # Cluster commands
@@ -91,7 +107,13 @@ module Sous
     ##
     
     def verbose?
-      options[:verbosity] && options[:verbosity] > 0
+      options && options[:verbosity] && options[:verbosity] > 0
+    end
+    
+  protected
+
+    def info(msg)
+      puts msg if verbose?
     end
 
   end

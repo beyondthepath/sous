@@ -70,6 +70,19 @@ describe Cluster do
     end
   end
   
+  describe "aws credentials" do
+    before(:each) do
+      # @mock_credentials = {'aws_access_key_id' => '1', 'aws_secret_access_key' => '2'}
+      # YAML.stub!(:parse).and_return(@mock_credentials)
+      # File.stub!(:open).and_return(mock_file)
+    end
+    it "should support a string path to a file" do
+      @cluster.aws_credentials 'examples/aws.yml'
+      @cluster.aws_access_key_id.should_not be_nil
+      @cluster.aws_secret_access_key.should_not be_nil
+    end
+  end
+  
 protected
 
   def mock_connection

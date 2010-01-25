@@ -1,9 +1,9 @@
 cluster :example do
+
+  aws_credentials 'examples/aws.yml'
+  image_id 'ami-bb709dd2'
   
-  aws_access_key_id '0WR9A355H2JG63WDHZ02'
-  aws_secret_access_key 'CLhsaJKfaVnszYEshp33yv5WoccHxtnEhJob+9QT'
-  
-  environment :production0 do
+  environment :production do
     role :app
     role :db
   end

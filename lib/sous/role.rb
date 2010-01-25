@@ -45,6 +45,16 @@ module Sous
       environment.connection
     end
     
+    
+    def cluster_attributes
+      cluster.attributes.merge(environment.attributes).merge(attributes)
+    end
+    
+    def image_id(image_id=nil)
+      attributes[:image_id] = image_id if image_id
+      attributes[:image_id] || environment.image_id
+    end
+    
     ###
     # Cluster commands
     ##
@@ -57,12 +67,16 @@ module Sous
     
     def provision!
       info "Provisioning #{handle}..."
-      info "Checking to see if #{handle} has any running servers."
-      info servers.inspect
-      info connection.servers.new
-      
+
       # 1. Check to see whether we need to provision, based on servers already running
-      # 2. Provision away as needed!
+      info "Checking to see if #{handle} has any running servers."
+      if connection.servers.length <= 0 # TODO: compare against minimum specified for this role
+        # 2. Verify that we have all the settings we need to start a new server
+        # 3. Provision away as needed!
+        info connection.servers.create(
+          :image_id => image_id
+        )
+      end
     end
     
     ###

@@ -47,6 +47,12 @@ module Sous
       @connection ||= cluster.connection
     end
     
+    def image_id(image_id=nil)
+      attributes[:image_id] = image_id if image_id
+      attributes[:image_id] || cluster.image_id
+    end
+    
+    
     ###
     # Cluster commands
     ##
