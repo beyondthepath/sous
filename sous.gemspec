@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Zadrozny"]
-  s.date = %q{2010-01-25}
+  s.date = %q{2010-01-26}
   s.default_executable = %q{sous}
   s.description = %q{Provision and prepare your chef-configured clusters.}
   s.email = %q{nick@beyondthepath.com}
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "bin/sous",
+     "examples/aws.yml",
      "examples/cluster.rb",
      "lib/sous.rb",
      "lib/sous/cluster.rb",

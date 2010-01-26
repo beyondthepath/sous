@@ -36,7 +36,9 @@ module Sous
     def servers(reload=false)
       # TODO: check to see if credentials are provided here for a separate cloud provider
       # Otherwise, defer upward to the environment
-      environment.servers
+      environment.servers.select do |server|
+        server.groups.include?(handle)
+      end
     end
     
     def connection
@@ -44,7 +46,6 @@ module Sous
       # Otherwise, defer upward to the environment
       environment.connection
     end
-    
     
     def cluster_attributes
       cluster.attributes.merge(environment.attributes).merge(attributes)
@@ -55,29 +56,42 @@ module Sous
       attributes[:image_id] || environment.image_id
     end
     
+    def security_groups
+      @security_groups ||= connection.security_groups.collect { |group| group.name }
+    end
+    
+    def security_group
+      unless security_groups.include?(handle)
+        connection.security_groups.create(:name => handle, :description => "Automatically created by sous.")
+        security_groups << handle
+      end
+      handle
+    end
+    
     ###
     # Cluster commands
     ##
     
     def list!
       servers.each do |instance|
-        puts instance.inspect if verbose?
+        info [instance.id, instance.state, instance.dns_name].join("\t")
       end
     end
     
     def provision!
-      info "Provisioning #{handle}..."
+      info "Provisioning..."
 
       # 1. Check to see whether we need to provision, based on servers already running
-      info "Checking to see if #{handle} has any running servers."
-      if connection.servers.length <= 0 # TODO: compare against minimum specified for this role
+      info "Checking for running servers."
+      if servers.length <= 0 # TODO: compare against minimum specified for this role
+        info "We have #{servers.length} servers, provisioning a new one..."
         # 2. Verify that we have all the settings we need to start a new server
         # letting fog throw an image_id error for now
         
         # 3. Provision away as needed!
         info connection.servers.create(
           :image_id => image_id,
-          :groups => [ handle ]
+          :groups => [ security_group, environment.security_group, cluster.security_group ]
         )
       end
     end
@@ -93,7 +107,7 @@ module Sous
   protected
 
     def info(msg)
-      puts msg if verbose?
+      puts [handle, msg].join(":\t") if verbose?
     end
 
   end

@@ -52,6 +52,17 @@ module Sous
       attributes[:image_id] || cluster.image_id
     end
     
+    def security_groups
+      @security_groups ||= connection.security_groups.collect { |group| group.name }
+    end
+    
+    def security_group
+      unless security_groups.include?(handle)
+        connection.security_groups.create(:name => handle, :description => "Automatically created by sous.")
+        security_groups << handle
+      end
+      handle
+    end
     
     ###
     # Cluster commands
@@ -64,7 +75,7 @@ module Sous
     end
     
     def provision!
-      puts "Provisioning #{handle}..." if verbose?
+      info "Provisioning..." if verbose?
       roles.each do |role|
         role.provision!
       end
@@ -80,6 +91,12 @@ module Sous
     
     def verbose?
       cluster.verbose?
+    end
+  
+  protected
+  
+    def info(msg)
+      puts [handle, msg].join(":\t")
     end
 
   end

@@ -41,7 +41,7 @@ module Sous
     end
     
     def handle
-      name
+      name.to_s
     end
     
     def connection
@@ -52,7 +52,9 @@ module Sous
     end
     
     def servers
-      @servers ||= connection.servers
+      connection.servers.select do |server|
+        server.state =~ /running|pending/
+      end
     end
 
     # TODO: add support for Array, Hash, Proc, whatever
@@ -70,6 +72,18 @@ module Sous
       attributes[:image_id] = image_id if image_id
       attributes[:image_id]
     end
+
+    def security_groups
+      @security_groups ||= connection.security_groups.collect { |group| group.name }
+    end
+    
+    def security_group
+      unless security_groups.include?(handle)
+        connection.security_groups.create(:name => handle, :description => "Automatically created by sous.")
+        security_groups << handle
+      end
+      handle
+    end
     
     ###
     # Cluster commands
@@ -84,7 +98,7 @@ module Sous
     
     def provision!(options={})
       self.options = options
-      puts "Provisioning #{handle}..." if verbose?
+      info "Provisioning..." if verbose?
       environments.each do |environment|
         environment.provision!
       end
@@ -113,7 +127,7 @@ module Sous
   protected
 
     def info(msg)
-      puts msg if verbose?
+      puts [handle, msg].join(":\t") if verbose?
     end
 
   end
