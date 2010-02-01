@@ -4,6 +4,7 @@ include Sous
 describe Cluster do
 
   before(:each) do
+    Fog.mock!
     @cluster = Cluster.new(:test)
   end
 

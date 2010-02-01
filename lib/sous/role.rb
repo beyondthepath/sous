@@ -96,6 +96,14 @@ module Sous
       end
     end
     
+    # Uh, yeah, careful with this one
+    def destroy!(options={})
+      info "Destroying..." if verbose?
+      servers.each do |server|
+        server.destroy
+      end
+    end
+    
     ###
     # Options accessors
     ##

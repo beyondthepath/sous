@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nick Zadrozny"]
-  s.date = %q{2010-01-26}
+  s.date = %q{2010-02-01}
   s.default_executable = %q{sous}
   s.description = %q{Provision and prepare your chef-configured clusters.}
   s.email = %q{nick@beyondthepath.com}

@@ -84,13 +84,17 @@ require 'sous'
 # TODO: merge run-time options into cluster options
 # TODO: execute the command (below)
 
-case ARGV.first
-when "list"
-  @cluster.list!(options)
-when "provision"
-  @cluster.provision!(options)
-when "bootstrap"
-  @cluster.bootstrap!(options)
-when "configure"
-  @cluster.configure!(options)
+ARGV.each do |command|
+  case command
+  when "list"
+    @cluster.list!(options)
+  when "provision"
+    @cluster.provision!(options)
+  when "bootstrap"
+    @cluster.bootstrap!(options)
+  when "configure"
+    @cluster.configure!(options)
+  when "destroy"
+    @cluster.destroy!(options)
+  end
 end

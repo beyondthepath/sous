@@ -81,6 +81,13 @@ module Sous
       end
     end
     
+    def destroy!(options={})
+      info "Destroying..." if verbose?
+      roles.each do |role|
+        role.destroy!
+      end
+    end
+    
     ###
     # Options accessors
     ##

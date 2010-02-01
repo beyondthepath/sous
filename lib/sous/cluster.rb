@@ -104,6 +104,14 @@ module Sous
       end
     end
     
+    def destroy!(options={})
+      self.options = options
+      info "Destroying..." if verbose?
+      environments.each do |environment|
+        environment.destroy!
+      end
+    end
+    
     # def bootstrap!
     #   environments.each do |environment|
     #     environment.bootstrap!
