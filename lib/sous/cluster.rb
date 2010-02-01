@@ -54,7 +54,7 @@ module Sous
     def servers
       connection.servers.select do |server|
         server.state =~ /running|pending/
-      end
+      end unless connection.servers.nil? || connection.servers.empty?
     end
 
     # TODO: add support for Array, Hash, Proc, whatever

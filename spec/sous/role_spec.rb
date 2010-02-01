@@ -5,6 +5,7 @@ describe Role do
 
   before(:each) do
     @role = Role.new(:test, mock_environment)
+    @role.stub!(:connection).and_return(mock_connection)
   end
 
   it "should require a name" do
@@ -35,11 +36,8 @@ describe Role do
   end
 
   describe "servers" do
-    it "should query for servers if authorization is provided on the role" do
-      pending "TODO: add support for a separate, role-specific cloud provider"
-    end
-    it "should look to the environment if authorization is not provided" do
-      mock_environment.should_receive(:servers)
+    it "should look to the connection for its servers" do
+      @role.should_receive(:connection).at_least(:once).and_return(mock_connection)
       @role.servers
     end
   end
@@ -58,27 +56,39 @@ protected
       :name => "environment",
       :connection => mock_connection,
       :servers => mock_servers,
-      :image_id => ""
+      :image_id => "",
+      :security_group => nil
     )
   end
   
   def mock_cluster
     @mock_cluster ||= mock(Cluster,
       :verbose? => false,
-      :name => "cluster"
+      :name => "cluster",
+      :security_group => nil
     )
   end
   
   def mock_connection
-    @mock_connection ||= mock("connection",
-      :servers => mock_servers
+    @mock_connection ||= mock(Fog::AWS::EC2,
+      :servers => mock_servers,
+      :security_groups => mock_security_groups
     )
   end
   
   def mock_servers
     @mock_servers ||= mock("servers",
       :create => mock("new server"),
-      :length => 0
+      :length => 0,
+      :select => [],
+      :empty? => true
+    )
+  end
+  
+  def mock_security_groups
+    @mock_security_groups ||= mock("security groups",
+      :create => [],
+      :collect => []
     )
   end
 

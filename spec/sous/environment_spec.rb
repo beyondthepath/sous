@@ -53,15 +53,12 @@ describe Environment do
   end
   
   describe "servers" do
-    it "should default to an empty array" do
-      @environment.servers.should == []
+    before(:each) do
+      @environment.stub!(:connection).and_return(mock_connection)
     end
-    it "should look to the cluster if authorization is not provided" do
-      @environment.cluster.should_receive(:servers)
+    it "should look to the connection for servers" do
+      @environment.should_receive(:connection)
       @environment.servers
-    end
-    it "should query for servers if authorization is provided on the role" do
-      pending "TODO: add support for a separate, role-specific cloud provider"
     end
   end
 
@@ -70,6 +67,12 @@ protected
   def mock_cluster
     @mock_cluster ||= mock(Cluster,
       :verbose? => false,
+      :servers => []
+    )
+  end
+  
+  def mock_connection
+    @mock_connection ||= mock("connection",
       :servers => []
     )
   end

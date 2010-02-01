@@ -5,7 +5,10 @@ describe Cluster do
 
   before(:each) do
     Fog.mock!
-    @cluster = Cluster.new(:test)
+    @cluster = Cluster.new(:test) do
+      aws_access_key_id 'test'
+      aws_secret_access_key 'test'
+    end
   end
 
   it "should require a name" do

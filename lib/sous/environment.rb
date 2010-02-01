@@ -31,20 +31,30 @@ module Sous
       self.attributes[:aws_access_key_id]
     end
     
+    def aws_secret_access_key(aws_secret_access_key=nil)
+      self.attributes[:aws_secret_access_key] = aws_secret_access_key unless aws_secret_access_key.nil?
+      self.attributes[:aws_secret_access_key]
+    end
+    
     def handle
       [cluster.name, name].join("-")
     end
     
-    def servers
-      # TODO: check to see if credentials are provided here for a separate cloud provider
-      # Otherwise, defer upward to the cluster
-      @servers ||= cluster.servers
+    def connection
+      @connection ||= if aws_access_key_id && aws_secret_access_key
+        Fog::AWS::EC2.new(
+          :aws_access_key_id => aws_access_key_id,
+          :aws_secret_access_key => aws_secret_access_key
+        )
+      else
+        cluster.connection
+      end
     end
     
-    def connection
-      # TODO: check to see if credentials are provided here for a separate cloud provider
-      # Otherwise, defer upward to the cluster
-      @connection ||= cluster.connection
+    def servers
+      connection.servers.select do |server|
+        server.state =~ /running|pending/
+      end unless connection.servers.nil? || connection.servers.empty?
     end
     
     def image_id(image_id=nil)
