@@ -16,10 +16,6 @@ describe Role do
     @role.name.should == :test
   end
 
-  it "should have servers" do
-    @role.servers
-  end
-
   it "should have a method to add a new instance" do
     @role.instance(:test)
   end
@@ -37,7 +33,8 @@ describe Role do
 
   describe "servers" do
     it "should look to the connection for its servers" do
-      @role.should_receive(:connection).at_least(:once).and_return(mock_connection)
+      @role.stub!(:connection).and_return(mock_connection)
+      mock_connection.should_receive(:servers)
       @role.servers
     end
   end
@@ -46,6 +43,10 @@ describe Role do
     it "should not break" do
       @role.provision!
     end
+  end
+  
+  it "should have a handle named after itself, its environment, and cluster" do
+    @role.handle.should == [@role.cluster.name, @role.environment.name, @role.name].join("-")
   end
 
 protected
@@ -57,7 +58,8 @@ protected
       :connection => mock_connection,
       :servers => mock_servers,
       :image_id => "",
-      :security_group => nil
+      :security_group => nil,
+      :attributes => {}
     )
   end
   
@@ -65,7 +67,8 @@ protected
     @mock_cluster ||= mock(Cluster,
       :verbose? => false,
       :name => "cluster",
-      :security_group => nil
+      :security_group => nil,
+      :attributes => {}
     )
   end
   

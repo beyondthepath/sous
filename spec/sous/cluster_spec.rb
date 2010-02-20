@@ -61,12 +61,8 @@ describe Cluster do
   end
   
   describe "servers" do
-    before(:all) do
-      # @cluster.stub!(:connection).and_return(mock_connection)
-    end
-    it "should open a connection to its provider" do
-      # @cluster.should_receive(:connection).and_return(mock_connection)
-      # @cluster.servers
+    before(:each) do
+      @cluster.stub!(:connection).and_return(mock_connection)
     end
     it "should receive a listing of servers from its provider connection" do
       @cluster.connection.should_receive(:servers)
@@ -85,6 +81,10 @@ describe Cluster do
       @cluster.aws_access_key_id.should_not be_nil
       @cluster.aws_secret_access_key.should_not be_nil
     end
+  end
+  
+  it "should have a handle based on its name" do
+    @cluster.handle.should == @cluster.name.to_s
   end
   
 protected

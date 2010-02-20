@@ -2,8 +2,8 @@ require 'sous/environment'
 require 'fog'
 
 module Sous
-  class Cluster
-
+  class Cluster < Base
+    
     attr_accessor :name
     attr_accessor :environments
     attr_accessor :attributes
@@ -30,60 +30,8 @@ module Sous
     # Cluster properties
     ##
     
-    def aws_access_key_id(aws_access_key_id=nil)
-      attributes[:aws_access_key_id] = aws_access_key_id if aws_access_key_id
-      attributes[:aws_access_key_id]
-    end
-    
-    def aws_secret_access_key(aws_secret_access_key=nil)
-      attributes[:aws_secret_access_key] = aws_secret_access_key if aws_secret_access_key
-      attributes[:aws_secret_access_key]
-    end
-    
-    def handle
-      name.to_s
-    end
-    
-    def connection
-      @connection ||= Fog::AWS::EC2.new(
-        :aws_access_key_id => aws_access_key_id,
-        :aws_secret_access_key => aws_secret_access_key
-      )
-    end
-    
-    def servers
-      connection.servers.select do |server|
-        server.state =~ /running|pending/
-      end unless connection.servers.nil? || connection.servers.empty?
-    end
-
-    # TODO: add support for Array, Hash, Proc, whatever
-    def aws_credentials(path)
-      case path
-      when String
-        require 'yaml'
-        credentials = YAML.parse_file(path)
-        aws_access_key_id(credentials['aws_access_key_id'].value)
-        aws_secret_access_key(credentials['aws_secret_access_key'].value)
-      end
-    end
-    
-    def image_id(image_id=nil)
-      attributes[:image_id] = image_id if image_id
-      attributes[:image_id]
-    end
-
-    def security_groups
-      @security_groups ||= connection.security_groups.collect { |group| group.name }
-    end
-    
-    def security_group
-      unless security_groups.include?(handle)
-        connection.security_groups.create(:name => handle, :description => "Automatically created by sous.")
-        security_groups << handle
-      end
-      handle
-    end
+    sous_attribute  :aws_access_key_id, :aws_secret_access_key,
+                    :image_id, :flavor
     
     ###
     # Cluster commands
@@ -127,10 +75,6 @@ module Sous
     ###
     # Options accessors
     ##
-    
-    def verbose?
-      options && options[:verbosity] && options[:verbosity] > 0
-    end
     
   protected
 

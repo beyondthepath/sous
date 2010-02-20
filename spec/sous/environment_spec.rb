@@ -61,11 +61,16 @@ describe Environment do
       @environment.servers
     end
   end
+  
+  it "should have a handle named after itself and its cluster" do
+    @environment.handle.should == [@environment.cluster.name, @environment.name].join("-")
+  end
 
 protected
 
   def mock_cluster
     @mock_cluster ||= mock(Cluster,
+      :name => :awesome,
       :verbose? => false,
       :servers => []
     )

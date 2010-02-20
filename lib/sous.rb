@@ -1,3 +1,4 @@
+require 'sous/base'
 require 'sous/cluster'
 
 def cluster(name, &block)

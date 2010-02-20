@@ -1,7 +1,7 @@
 require 'sous/role'
 
 module Sous
-  class Environment
+  class Environment < Base
 
     attr_accessor :name
     attr_accessor :cluster
@@ -26,53 +26,7 @@ module Sous
     # Cluster properties
     ##
     
-    def aws_access_key_id(aws_access_key_id=nil)
-      self.attributes[:aws_access_key_id] = aws_access_key_id unless aws_access_key_id.nil?
-      self.attributes[:aws_access_key_id]
-    end
-    
-    def aws_secret_access_key(aws_secret_access_key=nil)
-      self.attributes[:aws_secret_access_key] = aws_secret_access_key unless aws_secret_access_key.nil?
-      self.attributes[:aws_secret_access_key]
-    end
-    
-    def handle
-      [cluster.name, name].join("-")
-    end
-    
-    def connection
-      @connection ||= if aws_access_key_id && aws_secret_access_key
-        Fog::AWS::EC2.new(
-          :aws_access_key_id => aws_access_key_id,
-          :aws_secret_access_key => aws_secret_access_key
-        )
-      else
-        cluster.connection
-      end
-    end
-    
-    def servers
-      connection.servers.select do |server|
-        server.state =~ /running|pending/
-      end unless connection.servers.nil? || connection.servers.empty?
-    end
-    
-    def image_id(image_id=nil)
-      attributes[:image_id] = image_id if image_id
-      attributes[:image_id] || cluster.image_id
-    end
-    
-    def security_groups
-      @security_groups ||= connection.security_groups.collect { |group| group.name }
-    end
-    
-    def security_group
-      unless security_groups.include?(handle)
-        connection.security_groups.create(:name => handle, :description => "Automatically created by sous.")
-        security_groups << handle
-      end
-      handle
-    end
+    sous_attribute :aws_access_key_id, :aws_secret_access_key, :image_id
     
     ###
     # Cluster commands
