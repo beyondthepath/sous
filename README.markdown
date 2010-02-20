@@ -11,6 +11,7 @@ In a config/cluster.rb file, you'll use a DSL to define your cluster, its enviro
     # as many environments and roles as it needs.
     
     cluster :app_name do
+    
       aws_access_key_id 'abc123'
       aws_secret_access_key 'cba321'
     
